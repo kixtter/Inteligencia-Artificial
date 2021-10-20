@@ -1,0 +1,6 @@
+C:\Users\Family\Documents\Semestre 9\Inteligencia Artificial\Inteligencia Artificial (Códigos)\Blind Search\bin\Debug\Blind Search.exe.config
+C:\Users\Family\Documents\Semestre 9\Inteligencia Artificial\Inteligencia Artificial (Códigos)\Blind Search\bin\Debug\Blind Search.exe
+C:\Users\Family\Documents\Semestre 9\Inteligencia Artificial\Inteligencia Artificial (Códigos)\Blind Search\bin\Debug\Blind Search.pdb
+C:\Users\Family\Documents\Semestre 9\Inteligencia Artificial\Inteligencia Artificial (Códigos)\Blind Search\obj\Debug\Blind Search.csprojResolveAssemblyReference.cache
+C:\Users\Family\Documents\Semestre 9\Inteligencia Artificial\Inteligencia Artificial (Códigos)\Blind Search\obj\Debug\Blind Search.exe
+C:\Users\Family\Documents\Semestre 9\Inteligencia Artificial\Inteligencia Artificial (Códigos)\Blind Search\obj\Debug\Blind Search.pdb
