@@ -13,7 +13,7 @@ namespace Blind_Search
 
         public A_Star() { }
 
-        public Nodo A_Estrella(string [][] problema, string solucionCadena)
+        public Nodo A_Estrella(string [][] problema, string solucionCadena, out int exploredState, out int statesToExplore)
         {
             Nodo Padre = new Nodo();
             Padre.estado = problema;
@@ -24,6 +24,8 @@ namespace Blind_Search
             Nodo Solucion = null;
             Nodo NodoExpansion = null;
             Nodo Hijo = null;
+            exploredState = 0;
+            statesToExplore = 0;
 
             //guarda en una lista la ubicación de cada numero del puzzle
             List<UbicacionNumeros> listUbicacionNum = new List<UbicacionNumeros>();
@@ -55,11 +57,13 @@ namespace Blind_Search
             {
                 if (EstadosPorExplorar.Count == 0)
                 {
+                    exploredState = EstadosExplorados.Count;
+                    statesToExplore = EstadosPorExplorar.Count;
                     return null;
                 }
 
-                EstadosPorExplorar.OrderBy(t => t.Distance_Manhattan);
-                NodoExpansion = EstadosPorExplorar.First();
+                var ordenado = EstadosPorExplorar.OrderBy(t => t.Distance_Manhattan);
+                NodoExpansion = ordenado.First();
                 EstadosPorExplorar.Remove(NodoExpansion);
 
                 EstadosExplorados.Add(MetodosGenerales.ArrayToString(NodoExpansion.estado));
@@ -88,6 +92,8 @@ namespace Blind_Search
 
             } while (Solucion == null);
 
+            exploredState = EstadosExplorados.Count;
+            statesToExplore = EstadosPorExplorar.Count;
             return Solucion;
         }
     }

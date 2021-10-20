@@ -13,7 +13,7 @@ namespace Blind_Search
 
         public Depth_limited() { }
 
-        public Nodo Busqueda_A_Profundidad_Limitada(string[][] problema, string solucionCadena, int limite, out bool limiteAlcanzado)
+        public Nodo Busqueda_A_Profundidad_Limitada(string[][] problema, string solucionCadena, int limite, out bool limiteAlcanzado, out int exploredState)
         {
             Nodo Padre = new Nodo();
             Padre.estado = problema;
@@ -22,18 +22,26 @@ namespace Blind_Search
             Padre.accion = MetodosGenerales.Action.nulo;
             Padre.estadoCadena = MetodosGenerales.ArrayToString(problema);
             limiteAlcanzado = false;
-            return BPL_Recursivo(Padre, EstadosPorExplorar, EstadosExplorados, solucionCadena, limite, out limiteAlcanzado);
+            exploredState = 0;
+            EstadosExplorados.Add(MetodosGenerales.ArrayToString(Padre.estado));
+            return BPL_Recursivo(Padre, EstadosPorExplorar, EstadosExplorados, solucionCadena, limite, out limiteAlcanzado, out exploredState);
         }
 
-        public Nodo BPL_Recursivo(Nodo NextToExplore, List<Nodo> listEstadosPorExplorar, List<string> listEstadosExplorados, string solucionCadena, int limite, out bool limitReached)
+        public Nodo BPL_Recursivo(Nodo NextToExplore, List<Nodo> listEstadosPorExplorar, List<string> listEstadosExplorados, string solucionCadena, int limite, out bool limitReached, out int exploredState)
         {
             Nodo IsResult = null;
             limitReached = false;
+            exploredState = 0;
 
             if (NextToExplore == null)
+            {
                 IsResult = null;
+            }
             else if (NextToExplore.estadoCadena == solucionCadena)
+            {
+                exploredState = EstadosExplorados.Count;
                 return NextToExplore;
+            }
             else if (limite == 0)
             {
                 listEstadosPorExplorar.Add(NextToExplore);
@@ -52,13 +60,16 @@ namespace Blind_Search
                     {
                         bool IsLimit = false;
                         Nodo Hijo = MetodosGenerales.Hijo(NextToExplore, null, listEstadosExplorados, fila, columna, accion);
-                        Nodo resultado = BPL_Recursivo(Hijo, listEstadosPorExplorar, listEstadosExplorados, solucionCadena, limite - 1, out IsLimit);
+                        if(Hijo != null)
+                            EstadosExplorados.Add(MetodosGenerales.ArrayToString(Hijo.estado));
+                        Nodo resultado = BPL_Recursivo(Hijo, listEstadosPorExplorar, listEstadosExplorados, solucionCadena, limite - 1, out IsLimit, out exploredState);
 
                         if (IsLimit)
                         {
                             limitReached = true;
-                            IsResult = null;
-                            break;
+                            continue;
+                            //IsResult = null;
+                            //break;
                         }
                         else if (resultado != null)
                         {
@@ -69,6 +80,7 @@ namespace Blind_Search
                 }
             }
 
+            exploredState = EstadosExplorados.Count;
             return IsResult;
         }
     }

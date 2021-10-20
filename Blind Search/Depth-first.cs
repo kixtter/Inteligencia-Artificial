@@ -13,7 +13,7 @@ namespace Blind_Search
 
         public Depth_first() { }
 
-        public Nodo Busqueda_A_Profundidad(string[][] problema, string solucionCadena)
+        public Nodo Busqueda_A_Profundidad(string[][] problema, string solucionCadena, out int exploredState, out int statesToExplore)
         {
             Nodo Padre = new Nodo();
             Padre.estado = problema;
@@ -24,9 +24,13 @@ namespace Blind_Search
             Nodo Solucion = null;
             Nodo NodoExpansion = null;
             Nodo Hijo = null;
+            exploredState = 0;
+            statesToExplore = 0;
 
             if (MetodosGenerales.ArrayToString(problema) == solucionCadena)
             {
+                exploredState = EstadosExplorados.Count;
+                statesToExplore = EstadosPorExplorar.Count;
                 return Padre;
             }
 
@@ -35,7 +39,11 @@ namespace Blind_Search
             do
             {
                 if (EstadosPorExplorar.Count == 0)
+                {
+                    exploredState = EstadosExplorados.Count;
+                    statesToExplore = EstadosPorExplorar.Count;
                     return null;
+                }
 
                 NodoExpansion = EstadosPorExplorar.Last();
                 EstadosPorExplorar.Remove(NodoExpansion);
@@ -64,7 +72,8 @@ namespace Blind_Search
                 }
             } while (Solucion == null);
 
-
+            exploredState = EstadosExplorados.Count;
+            statesToExplore = EstadosPorExplorar.Count;
             return Solucion;
         }
     }

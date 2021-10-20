@@ -15,6 +15,8 @@ namespace Blind_Search
             int dimension = 0;
             int algoritmo = 0;
             int limite = 0;
+            int exploredStates = 0;
+            int statesToExplore = 0;
             string manualAutomatica = "";
             string solucionCadena = "";
             bool salir = false;
@@ -33,7 +35,7 @@ namespace Blind_Search
                     "1.- A lo ancho\n" + 
                     "2.- A profundidad\n" +
                     "3.- A profundidad limitada\n" +
-                    "4.- A profundidad iterativan" + 
+                    "4.- A profundidad iterativa\n" + 
                     "5.- A estrella";
 
             #endregion
@@ -42,8 +44,13 @@ namespace Blind_Search
             {
                 puzzle = new string[0][];
                 dimension = 0;
+                algoritmo = 0;
                 manualAutomatica = "";
                 solucionCadena = "";
+                exploredStates = 0;
+                statesToExplore = 0;
+                limite = 0;
+                limiteAlcancado = false;
 
                 while (dimension < 2 || dimension > 5)
                 {
@@ -106,12 +113,12 @@ namespace Blind_Search
                 {
                     case 1:
                         {
-                            solucion = new Breadth_first().Busqueda_A_Lo_Ancho(puzzle, solucionCadena);
+                            solucion = new Breadth_first().Busqueda_A_Lo_Ancho(puzzle, solucionCadena, out exploredStates, out statesToExplore);
                         }
                         break;
                     case 2:
                         {
-                            solucion = new Depth_first().Busqueda_A_Profundidad(puzzle, solucionCadena);
+                            solucion = new Depth_first().Busqueda_A_Profundidad(puzzle, solucionCadena, out exploredStates, out statesToExplore);
                         }
                         break;
                     case 3:
@@ -129,17 +136,21 @@ namespace Blind_Search
                                     Console.WriteLine("El limite debe ser diferente de cero");
                                 }
                             }
-                            solucion = new Depth_limited().Busqueda_A_Profundidad_Limitada(puzzle, solucionCadena, limite, out limiteAlcancado);
+                            solucion = new Depth_limited().Busqueda_A_Profundidad_Limitada(puzzle, solucionCadena, limite, out limiteAlcancado, out exploredStates);
+                            if (limiteAlcancado)
+                            {
+                                Console.WriteLine("******Limite alcanzado******");
+                            }
                         }
                         break;
                     case 4:
                         {
-                            solucion = new Iterative_Deepening().Profundidad_Iterativa(puzzle, solucionCadena);
+                            solucion = new Iterative_Deepening().Profundidad_Iterativa(puzzle, solucionCadena, out exploredStates);
                         }
                         break;
                     case 5:
                         {
-                            solucion = new A_Star().A_Estrella(puzzle, solucionCadena);
+                            solucion = new A_Star().A_Estrella(puzzle, solucionCadena, out exploredStates, out statesToExplore);
                         }
                         break;
                 }
@@ -152,10 +163,14 @@ namespace Blind_Search
                     Console.WriteLine("Cantidad de movimientos: " + solucion.Costo);
                     Console.WriteLine("Acciones realizadas: " + MetodosGenerales.AccionesRealizadas(solucion));
                     Console.WriteLine("Tiempo transcurrido: " + dtFinal.Subtract(dtInicio));
+                    Console.WriteLine("Nodos faltantes por expandir: " + statesToExplore);
+                    Console.WriteLine("Nodo explorados: " + exploredStates);
                 }
                 else
                 {
                     Console.WriteLine("No fue posible encontrar el resultado");
+                    Console.WriteLine("Nodos faltantes por expandir: " + statesToExplore);
+                    Console.WriteLine("Nodo explorados: " + exploredStates);
                 }
 
                 Console.WriteLine("SI DESEA SALIR PRESIONE ESC, SI DESEA CONTINUA PRESIONE ENTER");

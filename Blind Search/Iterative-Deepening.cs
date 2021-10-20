@@ -13,7 +13,7 @@ namespace Blind_Search
 
         public Iterative_Deepening() { }
 
-        public Nodo Profundidad_Iterativa(string[][] problema, string solucionCadena)
+        public Nodo Profundidad_Iterativa(string[][] problema, string solucionCadena, out int exploredState)
         {
             Nodo Padre = new Nodo();
             Padre.estado = problema;
@@ -26,13 +26,14 @@ namespace Blind_Search
             Nodo Solucion = null;
             Depth_limited Busqueda_Limitada = new Depth_limited();
             bool limite_Alcanzado = false;
+            exploredState = 0;
 
             do
             {
                 limite++;
                 EstadosPorExplorar.Clear();
 
-                Solucion = Busqueda_Limitada.BPL_Recursivo(Padre, EstadosPorExplorar, EstadosExplorados, solucionCadena, limite, out limite_Alcanzado);
+                Solucion = Busqueda_Limitada.BPL_Recursivo(Padre, EstadosPorExplorar, EstadosExplorados, solucionCadena, limite, out limite_Alcanzado, out exploredState);
             } while (Solucion == null);
 
             return Solucion;
