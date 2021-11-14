@@ -16,11 +16,12 @@ namespace GeneticAlgorithms
 
     class MetodosAuxiliares
     {
-        public static List<Individuo> GeneraPrimeraPoblacion(int CantidadReinas, int CantidadIndividuosParaReproduccion, string[][] plantilla)
+        public static List<Individuo> GeneraPrimeraPoblacion(int CantidadReinas, int CantidadIndividuosParaReproduccion)
         {
             Random rnd = new Random();
             List<Individuo> lista = new List<Individuo>();
-            
+            string[][] plantilla;
+
             while (lista.Count < CantidadIndividuosParaReproduccion)
             {
                 string cadena = "";
@@ -29,7 +30,8 @@ namespace GeneticAlgorithms
                     cadena += rnd.Next(CantidadReinas);
                 }
 
-                lista.Add(new Individuo() { estado = cadena, attacking = CalculaCantidadAtaques((string[][])plantilla.Clone(), cadena) });
+                plantilla = GeneraPlantilla(CantidadReinas);
+                lista.Add(new Individuo() { estado = cadena, attacking = CalculaCantidadAtaques(plantilla, cadena) });
             }
 
             return lista;
@@ -37,7 +39,11 @@ namespace GeneticAlgorithms
 
         public static int CalculaCantidadAtaques(string[][] plantilla,  string estado)
         {
-            string[] puzzle = estado.Split();
+            string[] puzzle = new string[estado.Length];
+            for (int i = 0; i < estado.Length; i++)
+            {
+                puzzle[i] = estado[i].ToString();
+            }
             int attack = 0;
 
             for (int i = 0; i < puzzle.Length; i++)
@@ -66,7 +72,7 @@ namespace GeneticAlgorithms
                         for (int a = ejeX - 1; a >= 0; a--)
                         {
                             ejeY++;
-                            if (ejeY > plantilla.Length)
+                            if (ejeY >= plantilla.Length)
                                 break;
 
                             if (plantilla[a][ejeY] == "1")
@@ -79,7 +85,7 @@ namespace GeneticAlgorithms
                         for (int a = ejeX + 1; a < plantilla[i].Length; a++)
                         {
                             ejeY++;
-                            if (ejeY > plantilla.Length)
+                            if (ejeY >= plantilla.Length)
                                 break;
 
                             if (plantilla[a][ejeY] == "1")
@@ -104,7 +110,7 @@ namespace GeneticAlgorithms
 
             for (int i = 0; i < plantilla.Length; i++)
             {
-                plantilla[i] = fila;
+                plantilla[i] = (string[])fila.Clone();
             }
 
             return plantilla;
@@ -122,7 +128,11 @@ namespace GeneticAlgorithms
         public static string Mutacion(string estado, int cantidadMutaciones)
         {
             Random rnd = new Random();
-            string[] puzzle = estado.Split();
+            string[] puzzle = new string[estado.Length];
+            for (int i = 0; i < estado.Length; i++)
+            {
+                puzzle[i] = estado[i].ToString();
+            }
             string resultado = "";
 
             for (int i = 0; i < cantidadMutaciones; i++)

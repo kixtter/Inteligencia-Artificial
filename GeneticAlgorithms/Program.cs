@@ -14,25 +14,28 @@ namespace GeneticAlgorithms
             bool salir = false;
             bool LimiteGeneracional = false;
             bool Mutaciones = false;
+            bool cambiarIndividuosReproduccion = false;
+            bool cambiarIndividiosXGeneracion = false;
             int CantidadReinas = 0;
             int CantidadGeneraciones = 0;
             int CantidadMutaciones = 0;
             int CantidadIndividuosXGeneracion = 0;
             int CantidadIndividuosReproduccion = 0;
             string YesNo = "";
-            string[][] plantilla;
 
             #endregion
 
             do
             {
                 CantidadReinas = 0;
-                CantidadGeneraciones = 0;
-                CantidadMutaciones = 0;
-                CantidadIndividuosXGeneracion = 0;
-                CantidadIndividuosReproduccion = 0;
+                CantidadGeneraciones = 600;//Limite default de generaciones que se pueden generar
+                CantidadMutaciones = 0;//Default de mutaciones
+                CantidadIndividuosXGeneracion = 100;//Default de reproducciones
+                CantidadIndividuosReproduccion = 50;//Default de 'K' estados elegidos para la siguiente generacion
                 LimiteGeneracional = false;
                 Mutaciones = false;
+                cambiarIndividuosReproduccion = false;
+                cambiarIndividiosXGeneracion = false;
                 YesNo = "";
 
                 while (CantidadReinas <= 0)
@@ -47,14 +50,11 @@ namespace GeneticAlgorithms
                         Console.WriteLine("Error al ingresar la cantidad de reinas, por favor ingrese un numero entero mayor a cero");
                     }
                 }
-
-                //Creación de la plantilla que contiene solo ceros(0)
-                plantilla = MetodosAuxiliares.GeneraPlantilla(CantidadReinas);
-
+                
                 #region Pregunta sobre generaciones
                 while (YesNo != "s" && YesNo != "n")
                 {
-                    Console.WriteLine("¿Desea que haya un limite de generaciones?\nEscriba S(si) o N(no): ");
+                    Console.WriteLine("¿Desea cambiar el limite de generaciones? (600 generaciones permitidas)\nEscriba S(si) o N(no): ");
                     YesNo = Console.ReadLine().ToLower();
 
                     if (YesNo != "s" && YesNo != "n")
@@ -65,6 +65,7 @@ namespace GeneticAlgorithms
 
                 if (LimiteGeneracional)
                 {
+                    CantidadGeneraciones = 0;
                     while (CantidadGeneraciones <= 0)
                     {
                         Console.WriteLine("Ingresa la cantidad de generaciones que desea generar: ");
@@ -80,36 +81,76 @@ namespace GeneticAlgorithms
                 }
                 #endregion
 
-                while (CantidadIndividuosReproduccion <= 1)
+                YesNo = "";
+
+                #region Cantidad de elegidos para reproduccion
+                while (YesNo != "s" && YesNo != "n")
                 {
-                    Console.WriteLine("¿Cuántos individuos será elegidos para Reproducirse?: ");
-                    try
-                    {
-                        CantidadIndividuosReproduccion = Convert.ToInt32(Console.ReadLine());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error al ingresar la cantidad de individuos, por favor ingrese un numero entero mayor a Uno");
-                    }
+                    Console.WriteLine("¿Desea cambiar la cantidad de individuos que se pueden reproducir? (50 individuos se pueden reproducir)\nEscriba S(si) o N(no): ");
+                    YesNo = Console.ReadLine().ToLower();
+
+                    if (YesNo != "s" && YesNo != "n")
+                        Console.WriteLine("Error, solo puede indicar S o N como respuesta");
+                    else if (YesNo == "s")
+                        cambiarIndividuosReproduccion = true;
                 }
 
-                while (CantidadIndividuosXGeneracion <= 0)
+                if (cambiarIndividuosReproduccion)
                 {
-                    Console.WriteLine("¿Cuántos individuos quiere que existan en cada generación?: ");
-                    try
+                    CantidadIndividuosReproduccion = 0;
+                    while (CantidadIndividuosReproduccion <= 1)
                     {
-                        CantidadIndividuosXGeneracion = Convert.ToInt32(Console.ReadLine());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error al ingresar la cantidad de individuos, por favor ingrese un numero entero mayor a cero");
+                        Console.WriteLine("¿Cuántos individuos será elegidos para Reproducirse?: ");
+                        try
+                        {
+                            CantidadIndividuosReproduccion = Convert.ToInt32(Console.ReadLine());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error al ingresar la cantidad de individuos, por favor ingrese un numero entero mayor a Uno");
+                        }
                     }
                 }
+                #endregion
+
+                YesNo = "";
+
+                #region Cantidad de individuos por generacion
+                while (YesNo != "s" && YesNo != "n")
+                {
+                    Console.WriteLine("¿Desea cambiar la cantidad de individuos que existiran por generación? (100 individuos por generacion)\nEscriba S(si) o N(no): ");
+                    YesNo = Console.ReadLine().ToLower();
+
+                    if (YesNo != "s" && YesNo != "n")
+                        Console.WriteLine("Error, solo puede indicar S o N como respuesta");
+                    else if (YesNo == "s")
+                        cambiarIndividiosXGeneracion = true;
+                }
+
+                if (cambiarIndividiosXGeneracion)
+                {
+                    CantidadIndividuosXGeneracion = 0;
+                    while (CantidadIndividuosXGeneracion <= 0)
+                    {
+                        Console.WriteLine("¿Cuántos individuos quiere que existan en cada generación?: ");
+                        try
+                        {
+                            CantidadIndividuosXGeneracion = Convert.ToInt32(Console.ReadLine());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error al ingresar la cantidad de individuos, por favor ingrese un numero entero mayor a cero");
+                        }
+                    }
+                }
+                #endregion
+
+                YesNo = "";
 
                 #region Pregunta sobre mutaciones
                 while (YesNo != "s" && YesNo != "n")
                 {
-                    Console.WriteLine("¿Desea que haya Mutaciones?\nEscriba S(si) o N(no): ");
+                    Console.WriteLine("¿Desea que cambiar la cantida de Mutaciones? (0 mutaciones permitidas)\nEscriba S(si) o N(no): ");
                     YesNo = Console.ReadLine().ToLower();
 
                     if (YesNo != "s" && YesNo != "n")
@@ -121,6 +162,7 @@ namespace GeneticAlgorithms
                 if (Mutaciones)
                 {
                     int limiteMutaciones = CantidadReinas / 8;//Solo puede mutarse 1/8
+                    CantidadMutaciones = 0;
                     while (CantidadMutaciones <= 0)
                     {
                         Console.WriteLine("Mínimo 1 mutaciones y Máximo " + limiteMutaciones + "mutaciones");
@@ -137,7 +179,24 @@ namespace GeneticAlgorithms
                 }
                 #endregion
 
+                YesNo = "";
 
+                int generacionesGeneradas = 0;
+                List<Individuo> listaPoblacion = MetodosAuxiliares.GeneraPrimeraPoblacion(CantidadReinas, CantidadIndividuosReproduccion);
+                string cadena = new GA().AlgoritmoGenetico
+                    (
+                        listaPoblacion, 
+                        CantidadGeneraciones, 
+                        CantidadMutaciones, 
+                        CantidadIndividuosXGeneracion, 
+                        CantidadIndividuosReproduccion, 
+                        out generacionesGeneradas
+                    );
+
+                if (generacionesGeneradas == CantidadGeneraciones)
+                    Console.WriteLine(cadena + " " + generacionesGeneradas + " generaciones generadas");
+                else
+                    Console.WriteLine(cadena);
 
                 Console.WriteLine("SI DESEA SALIR PRESIONE ESC, SI DESEA CONTINUAR PRESIONE ENTER");
                 ConsoleKeyInfo key = Console.ReadKey();
