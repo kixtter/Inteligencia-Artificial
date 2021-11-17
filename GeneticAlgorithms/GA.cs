@@ -13,6 +13,7 @@ namespace GeneticAlgorithms
         public string AlgoritmoGenetico
             (
                 List<Individuo> listaPoblacion,
+                int cantidadReinas,
                 int cantidadGeneraciones,
                 int cantidadMutaciones,
                 int cantidadIndividuosXGeneracion,
@@ -33,7 +34,7 @@ namespace GeneticAlgorithms
 
                 if (generaciones == cantidadGeneraciones)
                 {
-                    generacionesGeneradas = cantidadGeneraciones;
+                    generacionesGeneradas = generaciones;
                     return "Alcanzo el limite de generaciones";
                 }
 
@@ -42,17 +43,17 @@ namespace GeneticAlgorithms
                     Individuo a = listaPoblacion[rnd.Next(listaPoblacion.Count)];
                     Individuo b = listaPoblacion[rnd.Next(listaPoblacion.Count)];
 
-                    string hijo = MetodosAuxiliares.Reproduccion(a, b);
+                    string hijo = MetodosAuxiliares.Reproduccion(a, b, cantidadReinas);
 
                     if (cantidadMutaciones > 0)
-                        MetodosAuxiliares.Mutacion(hijo, cantidadMutaciones);
+                        hijo = MetodosAuxiliares.Mutacion(hijo, cantidadMutaciones, cantidadReinas);
 
-                    plantilla = MetodosAuxiliares.GeneraPlantilla(a.estado.Length);
+                    plantilla = MetodosAuxiliares.GeneraPlantilla(cantidadReinas);
 
                     NextGeneration.Add(new Individuo()
                     {
                         estado = hijo,
-                        attacking = MetodosAuxiliares.CalculaCantidadAtaques(plantilla, hijo)
+                        attacking = MetodosAuxiliares.CalculaCantidadAtaques(plantilla, hijo, cantidadReinas)
                     });
                 }
 
@@ -64,7 +65,7 @@ namespace GeneticAlgorithms
                 if (primeroLista.attacking == 0)
                 {
                     resultado = primeroLista.estado;
-                    generacionesGeneradas = generacionesGeneradas + 1;
+                    generacionesGeneradas = generaciones + 1;
                 }
 
                 listaPoblacion = listaPoblacion.GetRange(0, cantidadIndividuosReproduccion);

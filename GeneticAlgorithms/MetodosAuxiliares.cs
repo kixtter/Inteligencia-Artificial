@@ -25,25 +25,22 @@ namespace GeneticAlgorithms
             while (lista.Count < CantidadIndividuosParaReproduccion)
             {
                 string cadena = "";
-                while (cadena.Length < CantidadReinas)
+                for (int i = 0; i < CantidadReinas; i++)
                 {
-                    cadena += rnd.Next(CantidadReinas);
+                    cadena += rnd.Next(CantidadReinas) + "-";
                 }
 
+                cadena = cadena.Substring(0, cadena.Length - 1);
                 plantilla = GeneraPlantilla(CantidadReinas);
-                lista.Add(new Individuo() { estado = cadena, attacking = CalculaCantidadAtaques(plantilla, cadena) });
+                lista.Add(new Individuo() { estado = cadena, attacking = CalculaCantidadAtaques(plantilla, cadena, CantidadReinas) });
             }
 
             return lista;
         }
 
-        public static int CalculaCantidadAtaques(string[][] plantilla,  string estado)
+        public static int CalculaCantidadAtaques(string[][] plantilla,  string estado, int cantidadReinas)
         {
-            string[] puzzle = new string[estado.Length];
-            for (int i = 0; i < estado.Length; i++)
-            {
-                puzzle[i] = estado[i].ToString();
-            }
+            string[] puzzle = estado.Split('-');
             int attack = 0;
 
             for (int i = 0; i < puzzle.Length; i++)
@@ -116,32 +113,36 @@ namespace GeneticAlgorithms
             return plantilla;
         }
 
-        public static string Reproduccion(Individuo a, Individuo b)
+        public static string Reproduccion(Individuo a, Individuo b, int CantidadReinas)
         {
             Random rnd = new Random();
-            int tamaño = a.estado.Length;
-            int split = rnd.Next(1, tamaño);
+            int split = rnd.Next(1, CantidadReinas);
+            string[] elemento1 = a.estado.Split('-');
+            string[] elemento2 = b.estado.Split('-');
+            string concatenacion = "";
 
-            return a.estado.Substring(0, split) + b.estado.Substring(split);
+            for (int i = 0; i < split; i++)
+                concatenacion += elemento1[i] + "-";
+
+            for (int i = split; i < elemento2.Length; i++)
+                concatenacion += elemento2[i] + "-";
+
+            return concatenacion.Substring(0, concatenacion.Length - 1);
         }
 
-        public static string Mutacion(string estado, int cantidadMutaciones)
+        public static string Mutacion(string estado, int cantidadMutaciones, int cantidadReinas)
         {
             Random rnd = new Random();
-            string[] puzzle = new string[estado.Length];
-            for (int i = 0; i < estado.Length; i++)
-            {
-                puzzle[i] = estado[i].ToString();
-            }
+            string[] puzzle = estado.Split('-');
             string resultado = "";
 
             for (int i = 0; i < cantidadMutaciones; i++)
-                puzzle[rnd.Next(estado.Length)] = rnd.Next(estado.Length).ToString();
+                puzzle[rnd.Next(cantidadReinas)] = rnd.Next(cantidadReinas).ToString();
 
             for (int i = 0; i < puzzle.Length; i++)
-                resultado += puzzle[i];
+                resultado += puzzle[i] + "-";
 
-            return resultado;
+            return resultado.Substring(0, resultado.Length - 1);
         }
     }
 }
